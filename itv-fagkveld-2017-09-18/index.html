@@ -8,7 +8,7 @@
 		<title>Irl DevOps</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/moon.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -24,10 +24,7 @@
 	</head>
 
 	<body>
-
 		<div class="reveal">
-
-			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
 				<section>
@@ -39,56 +36,43 @@
 				</section>
 
 				<section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
-
+					<ul>
+						<li>Trunk-Based Development</li>
+						<li>Red-green refactor</li>
+						<li>Cake</li>
+						<li>GitVersion</li>
+						<li>Octopus Deploy</li>
+						<li>Scripted Release</li>
+					</ul>
+					
 					<aside class="notes">
 						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
 					</aside>
 				</section>
-
-
-
-
-				<section>
-					<h2>Marvelous Unordered List</h2>
-					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Fantastic Ordered List</h2>
-					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
-					</ol>
-				</section>
+				
 
 				<section>
 					<h2>Pretty Code</h2>
-					<pre><code contenteditable>
-function linkify( selector ) {
-  if( supports3DTransforms ) {
+					<pre><code data-trim>
+let buildDir  = Path.GetFullPath "./build/"
+let deployDir = Path.GetFullPath "./deploy/"
+let version = "0.1"  // or retrieve from CI server
 
-    var nodes = document.querySelectorAll( selector );
+Target "Clean" (fun _ ->
+    CleanDirs [buildDir; deployDir]
+)
 
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
+Target "InstallDotnet" (fun _ ->
+    DotnetSdkInstall SdkVersions.NetCore101
+)
 
-      if( !node.className ) ) {
-        node.className += ' roll';
-      }
-    };
-  }
-}
+Target "RestorePackages" (fun _ ->
+    DotnetRestore ( id ) "Dilemmas.sln"
+)
+
+Target "BuildApi" (fun _ ->
+    DotnetBuild (fun p -> { p with Configuration = Release; OutputPath = Some buildDir }) "Dilemmas.sln"
+)
 					</code></pre>
 				</section>
 
