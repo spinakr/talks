@@ -27,54 +27,268 @@
 		<div class="reveal">
 			<div class="slides">
 
-				<section>
-					<h1>Irl DevOps</h1>
-					<h5>Tekniker og verktøy fra den virkelig verden</h3>
-					<p>
-						<small><a href="https://kofoedanders.com">https://kofoedanders.com</a> / <a href="http://twitter.com/kofoedanders">@kofoedanders</a></small>
-					</p>
-				</section>
 
 				<section>
-					<ul>
-						<li>Trunk-Based Development</li>
-						<li>Red-green refactor</li>
-						<li>Cake</li>
-						<li>GitVersion</li>
-						<li>Octopus Deploy</li>
-						<li>Scripted Release</li>
-					</ul>
-					
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
+					<section>
+						<h1>Irl DevOps</h1>
+						<h5>Techniques and tools from the real world</h3>
+						<p>
+							<small><a href="kofoedanders.com/irl-devops">kofoedanders.com/irl-devops</a></small>
+						</p>
+						<aside class="notes">
+							<ul>
+								<li>Hvordan ser devops ut i praksis</li>
+							</ul>
+						</aside>
+					</section>
+
+					<section>
+						<blockquote cite="http://donovanbrown.com/post/what-is-devops">
+							&ldquo;DevOps is the union of people, process, and products to enable continuous delivery of value to our end users.&rdquo;
+						</blockquote>
+						<small> - Donovan Brown </small> 
+						<aside class="notes">
+							<ul>
+								<li>Levere verdi til brukere raskt og enkelt</li>
+								<li>Forutsigbar process</li>
+								<li>Ungå gjentagende feil</li>
+							</ul>
+						</aside>
+					</section>
 				</section>
 				
 
 				<section>
-					<h2>Pretty Code</h2>
-					<pre><code data-trim>
-let buildDir  = Path.GetFullPath "./build/"
-let deployDir = Path.GetFullPath "./deploy/"
-let version = "0.1"  // or retrieve from CI server
-
-Target "Clean" (fun _ ->
-    CleanDirs [buildDir; deployDir]
-)
-
-Target "InstallDotnet" (fun _ ->
-    DotnetSdkInstall SdkVersions.NetCore101
-)
-
-Target "RestorePackages" (fun _ ->
-    DotnetRestore ( id ) "Dilemmas.sln"
-)
-
-Target "BuildApi" (fun _ ->
-    DotnetBuild (fun p -> { p with Configuration = Release; OutputPath = Some buildDir }) "Dilemmas.sln"
-)
-					</code></pre>
+					<ul>
+						<li>Development / Source control</li>
+						<li>Build</li>
+						<li>Deploy</li>
+						<li>Release</li>
+						<li>(Monitoring)</li>
+					</ul>
+					
+					<aside class="notes">
+					</aside>
 				</section>
+
+
+				<section>
+					<section> 
+						<h2>Red-green refactor + BDD </h2>
+						<ul>
+							<li>"Reproduce" bug with a test!</li>
+							<li>Tests as documentation</li>
+						</ul>
+					</section>
+
+					<section> 
+						<img src="/images/tests.png">
+					</section>
+
+					<aside class="notes">
+						<ul>
+							<li>Gir trygghet</li>
+							<li>Tillater hyppigere release</li>
+							<li>Bugs kommer ikke tilbake</li>
+						</ul>
+					</aside>
+				</section>
+
+
+				<section>
+					<section>
+						<h1> Source control </h1>
+					</section>
+
+					<section> 
+						<h2> Trunk-Based Development </h2>
+						<ul>
+							<li>One branch - the trunk</li>
+							<li>Always releasable</li>
+							<li>(Feature branches for code reviews)</li>
+						</ul>
+					</section>
+					
+					<section> 
+						<h3> One long living branch </h3>
+						<img src="/images/one-flow.png">
+					</section>
+
+					<section> 
+						<h3> Proper commit messages </h3>
+						<pre><code data-trim class="nohighlight">
+							Make home page correctly redirect after loging in
+
+							When loggin in through the home page users will be redirected
+							to the welcome page, without having to click the "enter page" link.
+							Users are more likely to stay if they do not have to click twice to 
+							enter the page.
+							This will affect marketing, as the adds previously shown at the 
+							splash page will no longer be visible.
+
+							US: #456754
+						</code></pre>
+						<aside class="notes">
+							Bruk commit templates og post-commit hooks for å bli vandt til å skrive gode commit meldinger 
+						</aside>
+					</section>
+				</section>
+
+			
+				<section>
+					<section>
+						<h1> Build </h1>
+					</section>
+
+					<section> 
+						<h2> Psake / Cake / Fake / Invoke-Build </h2>
+						
+						<aside class="notes">
+							<ul>
+								<li>Velg en og bruk det</li>
+								<li>Ikke ha bygg deffinert i team city eller vsts</li>
+								<li>Kjører også lokalt</li>
+							</ul>
+						</aside>
+					</section>
+
+					<section> 
+						<h2>Tasks in code not Team City</h2>
+
+						<pre class="stretch"><code data-trim class="C#">
+							Task("Clean").Does(() =>
+							{
+							  CleanDirectory(buildDir);
+							});
+
+							Task("Restore-NuGet-Packages")
+							  .IsDependentOn("Clean")
+							  .Does(() =>
+							{
+							  NuGetRestore("./src/Example.sln");
+							});
+
+							Task("Build")
+							  .IsDependentOn("Restore-NuGet-Packages")
+							  .Does(() =>
+							{
+							  MSBuild("./src/Example.sln", settings => settings.SetConfiguration(configuration));
+							});
+						</code></pre>
+					</section>
+
+					<section> 
+						<h2> Last task pushes to deployment system </h2>
+
+						<pre><code data-trim class="C#">
+							Task("Push-Package")
+								.WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
+								.IsDependentOn("Pack-MessagingService")
+								.Does(() => 
+							{
+								OctoPush(octopusPackageFeed, octopusApiKey,
+									new FilePath(packagePath + "InsuranceImport.MessagingService." + versionInfo.Version + ".nupkg"),
+									new OctopusPushSettings());
+							});
+
+						</code></pre>
+						
+						<aside class="notes">
+							<ul>
+								<li>a</li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+
+
+				<section>
+					<section> 
+						<h2>GitVersion</h2>
+					</section>
+
+					<section>
+						<pre><code data-trim>
+							assembly-versioning-scheme: MajorMinor
+							branches:
+								master:
+									regex: master
+									increment: minor
+								hotfix:
+									regex: hotfix(es)?[/-]
+									tag: hotfix
+									increment: patch
+								features:
+									regex: features?[/-]
+									tag: useBranchName
+						</code></pre>
+					</section>
+					
+					<section>
+						<pre><code data-trim class="C#">
+							var version = new VersionInfo("1.0.0.0");
+
+							Task("GetNextVersion").Does(() =>
+							{
+							  var versionInfo = GitVersion(
+							    new GitVersionSettings
+								{
+									Url = repositoryUrl,
+									Branch = branch
+								});
+
+							  version = versionInfo.MajorMinorPatch;
+							});
+
+						</code></pre>
+					</section>
+				</section>
+
+
+				<section>
+					<section> 
+						<h2>Octopus Deploy</h2>
+						<img src="/images/octopus-dash2.png">
+					</section>
+
+					<section>
+						<h3> Automated Deploys </h3>
+
+						<ul>
+							<li>ITEST when packages is pushed</li>
+							<li>STEST every morning</li>
+							<li>ATEST on demand</li>
+						</ul>
+
+					</section>
+
+					<section>
+						<h3> Lifecycles</h3>
+						
+						<span class="fragment">
+							<img src="/images/lifecycle1.png">
+						</span>
+						<span class="fragment">
+							<img src="/images/lifecycle2.png">
+						</span>
+
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h1> Releasing </h1>
+					</section>
+
+
+					
+					<aside class="notes">
+					</aside>
+				</section>
+				
+
+
 
 				<section>
 					<h2>Thank you!</h2>
