@@ -1,0 +1,22 @@
+{
+    "OctopusServerUri": "http://octopus.waypoint-toolbox.ifint.biz/api",
+    "OctopusApiKey": "API-4TJFGBYW3GIZ8RWV8ZH1QSEGTG8",
+    "STestEnvironmentName": "Waypoint STest",
+    "ATestEnvironmentName": "Waypoint ATest",
+    "ProductionEnvironmentNames": [
+        "Production",
+        "Production Test",
+        "Production Copy"
+    ],
+
+    "GitBaseUrl": "http://tfs2010at.ifint.biz/tfs/TFS2008Collection/WayPoint%20GIT/_git/",
+    "TempFolder": "C:\\Bin\\cmder\\bin\\Kofpack\\ReleaseScripts\\tmpFolder",
+    "ServiceNames": [
+        "Arronax",
+        "Conseil",
+        "Conseil.Web",
+        "CarDamageWarranty",
+        "FinalPremiumCalculation",
+        "InsuranceImport"
+    ]
+}
