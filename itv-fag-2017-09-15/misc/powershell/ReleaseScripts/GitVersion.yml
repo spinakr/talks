@@ -1,0 +1,6 @@
+assembly-versioning-scheme: MajorMinor
+branches:
+  master:
+    increment: minor
+ignore:
+  commits-before: 2017-03-01T12:23:15
