@@ -51,7 +51,6 @@
 							<ul>
 								<li>Levere verdi til brukere raskt og enkelt</li>
 								<li>Forutsigbar process</li>
-								<li>Ungå gjentagende feil</li>
 							</ul>
 						</aside>
 					</section>
@@ -79,19 +78,26 @@
 							<li>"Reproduce" bug with a test!</li>
 							<li>Tests as documentation</li>
 						</ul>
+
+						<aside class="notes">
+							<ul>
+								<li>Gir trygghet</li>
+								<li>Tillater hyppigere release</li>
+								<li>Bugs kommer ikke tilbake</li>
+							</ul>
+						</aside>
 					</section>
 
 					<section> 
 						<img src="/images/tests.png">
+
+						<aside class="notes">
+							<ul>
+								<li>Tester verdiful del av implementasjon / dokumentasjon</li>
+							</ul>
+						</aside>
 					</section>
 
-					<aside class="notes">
-						<ul>
-							<li>Gir trygghet</li>
-							<li>Tillater hyppigere release</li>
-							<li>Bugs kommer ikke tilbake</li>
-						</ul>
-					</aside>
 				</section>
 
 
@@ -103,8 +109,9 @@
 					<section> 
 						<h2> Trunk-Based Development </h2>
 						<ul>
-							<li>One branch - the trunk</li>
-							<li>Always releasable</li>
+							<li>One eternal branch</li>
+							<li>Commit built only once</li>
+							<li>Production code identifiable</li>
 							<li>(Feature branches for code reviews)</li>
 						</ul>
 					</section>
@@ -112,6 +119,13 @@
 					<section> 
 						<h3> One long living branch </h3>
 						<img src="/images/one-flow.png">
+						
+						<aside class="notes">
+							<ul>
+								<li>Ingen risikable mergekonflikter</li>
+								<li>Enkel og forståelig prosess</li>
+							</ul>
+						</aside>
 					</section>
 
 					<section> 
@@ -128,8 +142,12 @@
 
 							US: #456754
 						</code></pre>
+
 						<aside class="notes">
-							Bruk commit templates og post-commit hooks for å bli vandt til å skrive gode commit meldinger 
+							<ul>
+								<li>Lesbar historik</li>
+								<li>Commit templates og post-commit hooks</li>
+							</ul>
 						</aside>
 					</section>
 				</section>
@@ -249,15 +267,21 @@
 					<section> 
 						<h2>Octopus Deploy</h2>
 						<img src="/images/octopus-dash2.png">
+
+						<aside class="notes">
+							<ul>
+								<li>Segregation of concerns - bygg / deploy</li>
+							</ul>
+						</aside>
 					</section>
 
 					<section>
 						<h3> Automated Deploys </h3>
 
 						<ul>
-							<li>ITEST when packages is pushed</li>
-							<li>STEST every morning</li>
-							<li>ATEST on demand</li>
+							<li class="fragment">ITEST when packages is pushed</li>
+							<li class="fragment">STEST every morning</li>
+							<li class="fragment">ATEST on demand</li>
 						</ul>
 
 					</section>
@@ -281,11 +305,11 @@
 						<h1> Releasing </h1>
 
 						<div class="fragment">
-							<ul>
-								<li>Tag release</li>
-								<li>Promote to ATEST</li>
-								<li>Schedule promote to production</li>
-							</ul>
+							<ol>
+								<li class="fragment">Tag release</li>
+								<li class="fragment">Promote to ATEST</li>
+								<li class="fragment">Schedule promote to production</li>
+							</ol>
 						</div>
 					</section>
 
@@ -302,25 +326,23 @@
 							</ul>
 						</aside>
 					</section>
+				</section>
 
-					<section>
-						<h2> Output when releaseing here! </h2>
+				<section>
 
-						<span class="fragment">
-							<img src="">
-						</span>
-
-					</section>
+					<ul>
+						<li><a href="https://kofoedanders.com/git-cooperation-simplified/">kofoedanders.com/git-cooperation-simplified</a></li>
+						<li><a href="https://kofoedanders.com/tests-that-matter/">kofoedanders.com/tests-that-matter</a></li>
+						<li><a href="https://kofoedanders.com/irl-devops">kofoedanders.com/irl-devops </a></li>
+					</ul>
 
 				</section>
 				
-
-
-
 				<section>
 					<h2>Thank you!</h2>
+
 					<ul>
-						<li><a href="https://kofoedanders.com">https://kofoedanders.com</a></li>
+						<li><a href="https://kofoedanders.com">kofoedanders.com</a></li>
 						<li><a href="http://twitter.com/kofoedanders">@kofoedanders</a></li>
 					</ul>
 				</section>
