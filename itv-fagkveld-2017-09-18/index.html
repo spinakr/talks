@@ -51,6 +51,7 @@
 							<ul>
 								<li>Levere verdi til brukere raskt og enkelt</li>
 								<li>Forutsigbar process</li>
+								<li>Denne talken: "process and products"</li>
 							</ul>
 						</aside>
 					</section>
@@ -59,11 +60,11 @@
 
 				<section>
 					<ul>
-						<li>Development / Source control</li>
+						<li>Development</li>
+						<li>Source control</li>
 						<li>Build</li>
 						<li>Deploy</li>
 						<li>Release</li>
-						<li>(Monitoring)</li>
 					</ul>
 					
 					<aside class="notes">
@@ -74,26 +75,33 @@
 				<section>
 					<section> 
 						<h2>Red-green refactor + BDD </h2>
-						<ul>
-							<li>"Reproduce" bug with a test!</li>
-							<li>Tests as documentation</li>
-						</ul>
+
+					</section>
+
+
+					<section> 
+						<h3>Reproduce bug with a test</h3>
+
+						<img src="/images/red-green-refactor.jpg">
 
 						<aside class="notes">
 							<ul>
-								<li>Gir trygghet</li>
-								<li>Tillater hyppigere release</li>
+								<li>Red -> green bug fixing</li>
+								<li>Trygghet - tillater hyppigere release</li>
 								<li>Bugs kommer ikke tilbake</li>
 							</ul>
 						</aside>
 					</section>
 
 					<section> 
+						<h3>Tests as documentation</h3>
+
 						<img src="/images/tests.png">
 
 						<aside class="notes">
 							<ul>
 								<li>Tester verdiful del av implementasjon / dokumentasjon</li>
+								<li>Enklere å maintaine en doc</li>
 							</ul>
 						</aside>
 					</section>
@@ -112,12 +120,17 @@
 							<li>One eternal branch</li>
 							<li>Commit built only once</li>
 							<li>Production code identifiable</li>
-							<li>(Feature branches for code reviews)</li>
 						</ul>
+
+						<aside class="notes">
+							<ul>
+								<li>Enklest mulig prosess</li>
+								<li></li>
+							</ul>
+						</aside>
 					</section>
 					
 					<section> 
-						<h3> One long living branch </h3>
 						<img src="/images/one-flow.png">
 						
 						<aside class="notes">
@@ -167,6 +180,7 @@
 								<li>Velg en og bruk det</li>
 								<li>Ikke ha bygg deffinert i team city eller vsts</li>
 								<li>Kjører også lokalt</li>
+								<li>Del av koden</li>
 							</ul>
 						</aside>
 					</section>
@@ -191,13 +205,14 @@
 							  .IsDependentOn("Restore-NuGet-Packages")
 							  .Does(() =>
 							{
-							  MSBuild("./src/Example.sln", settings => settings.SetConfiguration(configuration));
+							  MSBuild("./src/Example.sln", settings => 
+								settings.SetConfiguration(configuration));
 							});
 						</code></pre>
 					</section>
 
 					<section> 
-						<h2> Last task pushes to deployment system </h2>
+						<h2> Last task push package </h2>
 
 						<pre><code data-trim class="C#">
 							Task("Push-Package")
@@ -206,7 +221,9 @@
 								.Does(() => 
 							{
 								OctoPush(octopusPackageFeed, octopusApiKey,
-									new FilePath(packagePath + "InsuranceImport.MessagingService." + versionInfo.Version + ".nupkg"),
+									new FilePath(packagePath + 
+										"InsuranceImport.MessagingService." + 
+										versionInfo.Version + ".nupkg"),
 									new OctopusPushSettings());
 							});
 
@@ -251,29 +268,20 @@
 					</section>
 					
 					<section>
-						<pre><code data-trim class="C#">
-							var version = new VersionInfo("1.0.0.0");
-
-							Task("GetNextVersion").Does(() =>
-							{
-							  var versionInfo = GitVersion(
-							    new GitVersionSettings
-								{
-									Url = repositoryUrl,
-									Branch = branch
-								});
-
-							  version = versionInfo.MajorMinorPatch;
-							});
-
-						</code></pre>
+						<ul>
+							<li>Build number</li>
+							<li>Assembly version </li>
+							<li>Package version </li>
+							<li>Release version </li>
+							<li>Git tag</li>
+						</ul>
 					</section>
 				</section>
 
 
 				<section>
 					<section> 
-						<h2>Octopus Deploy</h2>
+						<h2>Deployment</h2>
 						<img src="/images/octopus-dash2.png">
 
 						<aside class="notes">
@@ -282,6 +290,10 @@
 								<li>Tar over idet en ny pakke pushes</li>
 							</ul>
 						</aside>
+					</section>
+
+					<section>
+						<h3> Script deploy/install! </h3>
 					</section>
 
 					<section>
@@ -308,6 +320,7 @@
 						<aside class="notes">
 							<ul>
 								<li>Må innom test miljøer</li>
+								<li>Tvunget til fornuftig prosess</li>
 							</ul>
 						</aside>
 					</section>
@@ -316,15 +329,13 @@
 
 				<section>
 					<section>
-						<h1> Releasing </h1>
+						<h2> Releasing </h2>
 
-						<div class="fragment">
-							<ol>
-								<li class="fragment">Tag release</li>
-								<li class="fragment">Promote to ATEST</li>
-								<li class="fragment">Schedule promote to production</li>
-							</ol>
-						</div>
+						<ol>
+							<li class="fragment">Tag release</li>
+							<li class="fragment">Promote to ATEST</li>
+							<li class="fragment">Schedule promote to production</li>
+						</ol>
 					</section>
 
 					<section>
@@ -345,22 +356,16 @@
 				</section>
 
 				<section>
-
-					<ul>
-						<li><a href="https://kofoedanders.com/git-cooperation-simplified/">kofoedanders.com/git-cooperation-simplified</a></li>
-						<li><a href="https://kofoedanders.com/tests-that-matter/">kofoedanders.com/tests-that-matter</a></li>
-						<li><a href="https://kofoedanders.com/irl-devops">kofoedanders.com/irl-devops </a></li>
-					</ul>
-
-				</section>
-				
-				<section>
 					<h2>Thank you!</h2>
 
-					<ul>
-						<li><a href="https://kofoedanders.com">kofoedanders.com</a></li>
-						<li><a href="http://twitter.com/kofoedanders">@kofoedanders</a></li>
-					</ul>
+						<p><a href="https://kofoedanders.com/git-cooperation-simplified/">kofoedanders.com/git-cooperation-simplified</a></p>
+						<p><a href="https://kofoedanders.com/tests-that-matter/">kofoedanders.com/tests-that-matter</a></p>
+						<p><a href="https://kofoedanders.com/irl-devops">kofoedanders.com/irl-devops </a></p>
+
+						<br>
+
+						<p><a href="https://kofoedanders.com">kofoedanders.com</a></p>
+						<p><a href="http://twitter.com/kofoedanders">@kofoedanders</a></p>
 				</section>
 			</div>
 		</div>
