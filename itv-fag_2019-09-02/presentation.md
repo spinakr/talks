@@ -55,8 +55,20 @@ slideNumber: true
 * Personlig vinning, samt bidra til fagmiljøet i Itverket
 * Lettere å selge, ev. få andre jobber senere
 * Erfaring med presentasjoner og/eller skriving
-* Uvurderlig erfaring både hos kunde og utenfor jobb
 * Ikke for "Itverket sin skyld"
 
+--
+
+* Blogg - fagbloggen og/eller personlig
+* Bidra på arrangementer
+* Delta på konferanser/kurs
+    * Del det du lærer!
+* Stack overflow
+* Today I learned
+* Følg med på twitter
+* Experimenter med teknologi
+* Utfordre de erfarene!
+
+--
 
 ---
